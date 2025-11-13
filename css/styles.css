@@ -10824,3 +10824,27 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+/* Fixed/pinned navbar with hide-on-scroll animation */
+.navbar-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  transform: translateY(0);
+  transition: transform 280ms cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+.navbar-fixed.navbar-hidden {
+  transform: translateY(-100%);
+}
+/* Add top padding to body equal to navbar height to avoid content jump */
+.has-fixed-navbar {
+  padding-top: var(--navbar-height, 0px);
+}
+
+/* Small visual tweak: add subtle shadow when fixed */
+.navbar-fixed {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}

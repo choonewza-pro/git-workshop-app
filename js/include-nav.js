@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(function (html) {
             container.innerHTML = html;
             setActiveNav();
+            try { setupPinnedNavbar(); } catch(e) { /* ignore */ }
         })
         .catch(function () {
             // Fallback: simple text link if fetch fails
@@ -36,5 +37,53 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (e) {
             // ignore
         }
+    }
+    
+    function setupPinnedNavbar() {
+        var nav = container.querySelector('nav') || document.getElementById('main-navbar');
+        if (!nav) return;
+
+        // Add class to make it fixed and prepare styling
+        nav.classList.add('navbar-fixed');
+
+        // Expose navbar height as CSS variable and add body padding
+        var updateHeight = function () {
+            var h = nav.offsetHeight || 0;
+            document.documentElement.style.setProperty('--navbar-height', h + 'px');
+        };
+        updateHeight();
+        window.addEventListener('resize', updateHeight);
+        document.body.classList.add('has-fixed-navbar');
+
+        // Hide on scroll down, show on scroll up
+        var lastScroll = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var ticking = false;
+        var threshold = 10;
+
+        window.addEventListener('scroll', function () {
+            var current = window.pageYOffset || document.documentElement.scrollTop || 0;
+            if (!ticking) {
+                window.requestAnimationFrame(function () {
+                    var delta = current - lastScroll;
+                    if (Math.abs(delta) > threshold) {
+                        if (current > lastScroll && current > 50) {
+                            // scrolling down -> hide
+                            nav.classList.add('navbar-hidden');
+                        } else {
+                            // scrolling up -> show
+                            nav.classList.remove('navbar-hidden');
+                        }
+                        lastScroll = current;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        // Ensure visible at top
+        window.addEventListener('scroll', function () {
+            if ((window.pageYOffset || 0) <= 5) nav.classList.remove('navbar-hidden');
+        }, { passive: true });
     }
 });

@@ -3,7 +3,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var container = document.getElementById('site-nav');
     if (!container) return;
 
-    fetch('partials/nav.html')
+    // Detect if we're in a subdirectory
+    var pathSegments = window.location.pathname.split('/').filter(function(s) { return s; });
+    var navPath = 'partials/nav.html';
+    
+    // If we're in a subdirectory (more than just the HTML file), add ../
+    if (pathSegments.length > 1) {
+        navPath = '../partials/nav.html';
+    }
+
+    fetch(navPath)
+        .then(function (res) {
+            if (!res.ok) {
+                // Try alternative path if first fails
+                return fetch(navPath === 'partials/nav.html' ? '../partials/nav.html' : 'partials/nav.html');
+            }
+            return res;
+        })
         .then(function (res) {
             if (!res.ok) throw new Error('Failed to load nav');
             return res.text();

@@ -30,7 +30,10 @@ jobs:
   
   job-2:
     runs-on: ubuntu-latest
+    environment: production
     steps:
+      - run: echo "${{ vars.APP_NAME }} is now deployed!"
+      - run: echo "${{ secrets.API_KEY }} is used for authentication."
       - name: Build Production
         run: echo "Building for production..."
       - name: Run Tests

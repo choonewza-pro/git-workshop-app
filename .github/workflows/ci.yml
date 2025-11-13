@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPANY_NAME: 'NTPLC'
+    environment: development
     steps:
       - run: echo "Hello ${{ github.actor }} from ${{ env.REPO_NAME }}"
       - run: echo "This is Job 1 ${{ github.job }} running on ${{ runner.os }}"

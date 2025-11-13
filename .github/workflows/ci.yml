@@ -8,9 +8,25 @@ on:
       - "chare/**"
       - "doc/**"
       - main
-  
+
+env:
+  SERVER_IP: '127.0.0.1'
+  SERVER_PORT: '8080'
+  REPO_NAME: ${{ github.repository }}
+
 jobs:
   job-1:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "Hello ${{ github.actor }} from ${{ env.REPO_NAME }}"
+      - run: echo "This is Job 1 ${{ github.job }} running on ${{ runner.os }}"
+      - run: echo "Server IP is ${{ env.SERVER_IP }} and Port is ${{ env.SERVER_PORT }}"
       - run: echo "Hello GitHub Actions"
+  
+  job-2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Production
+        run: echo "Building for production..."
+      - name: Run Tests
+        run: echo "Running tests..."

@@ -17,11 +17,15 @@ env:
 jobs:
   job-1:
     runs-on: ubuntu-latest
+    env:
+      COMPANY_NAME: 'NTPLC'
     steps:
       - run: echo "Hello ${{ github.actor }} from ${{ env.REPO_NAME }}"
       - run: echo "This is Job 1 ${{ github.job }} running on ${{ runner.os }}"
       - run: echo "Server IP is ${{ env.SERVER_IP }} and Port is ${{ env.SERVER_PORT }}"
-      - run: echo "Hello GitHub Actions"
+      - run: echo "Hello GitHub Actions from ${{ env.COMPANY_NAME }}"
+      - run: echo "${{ vars.APP_NAME }} is now deployed!"
+      - run: echo "${{ secrets.API_KEY }} is used for authentication."
   
   job-2:
     runs-on: ubuntu-latest
